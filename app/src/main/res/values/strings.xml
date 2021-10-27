@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">APlaceForPaws</string>
+    <string name="app_id">APlaceForPaws</string>
+    <string name="imageDescription">This is the App logo</string>
+    <string name="welcome_text">Welcome to</string>
+    <string name="underline">----------------------</string>
+    <string name="app_name">A place for paws</string>
 </resources>
