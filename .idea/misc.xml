@@ -3,8 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/drawable/roundedbutton.xml" value="0.2786458333333333" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/login_page.xml" value="0.67" />
+        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/login_page.xml" value="0.33" />
       </map>
     </option>
   </component>
