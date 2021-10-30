@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button login = findViewById(R.id.loginButton);
+        Button login = findViewById(R.id.loginPageButton);
         login.setOnClickListener(v -> openLoginPageActivity());
     }
 

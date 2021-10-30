@@ -76,7 +76,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/loginPageButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
         android:backgroundTint="@color/babyblue"
@@ -92,7 +92,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerPageButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
         android:backgroundTint="@color/darkpeach"
@@ -108,7 +108,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/visitor"
+        android:id="@+id/visitorButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
         android:layout_alignParentEnd="true"
