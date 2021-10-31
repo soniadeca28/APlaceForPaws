@@ -1,10 +1,15 @@
 <resources>
     <string name="app_id">APlaceForPaws</string>
+    <string name="app_name">A place for paws</string>
     <string name="imageDescription">This is the App logo</string>
     <string name="login">Log in</string>
     <string name="register">Register</string>
     <string name="visitor">Visitor</string>
     <string name="welcome_text">Welcome to</string>
     <string name="underline">----------------------</string>
-    <string name="app_name">A place for paws</string>
+    <string name="loginText">Log in</string>
+    <string name="backButton">❮</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+
 </resources>

@@ -76,7 +76,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/loginPageButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
         android:backgroundTint="@color/babyblue"
@@ -92,7 +92,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/registerPageButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
         android:backgroundTint="@color/darkpeach"
@@ -108,19 +108,20 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/visitor"
+        android:id="@+id/visitorButton"
         android:layout_width="160dp"
         android:layout_height="53dp"
+        android:layout_alignParentEnd="true"
         android:backgroundTint="@color/babyblue"
         android:text="@string/visitor"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.938"
+        app:layout_constraintVertical_bias="0.946"
         tools:ignore="TextContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
