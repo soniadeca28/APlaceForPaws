@@ -15,10 +15,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button login = findViewById(R.id.loginPageButton);
         login.setOnClickListener(v -> openLoginPageActivity());
+
+        Button register = findViewById(R.id.registerPageButton);
+        register.setOnClickListener(v -> openRegisterPageActivity());
     }
 
     private void openLoginPageActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+    }
+
+    private void openRegisterPageActivity() {
+        Intent intent2 = new Intent(this, RegisterActivity.class);
+        startActivity(intent2);
     }
 }
