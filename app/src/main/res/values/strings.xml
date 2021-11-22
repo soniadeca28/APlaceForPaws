@@ -8,6 +8,7 @@
     <string name="welcome_text">Welcome to</string>
     <string name="underline">----------------------</string>
     <string name="loginText">Log in</string>
+    <string name="registerText">Register</string>
     <string name="backButton">❮</string>
     <string name="username">username</string>
     <string name="password">password</string>
