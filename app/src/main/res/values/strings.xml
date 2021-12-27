@@ -10,7 +10,10 @@
     <string name="loginText">Log in</string>
     <string name="registerText">Register</string>
     <string name="backButton">❮</string>
-    <string name="username">username</string>
+    <string name="email">email</string>
+    <string name="name">name</string>
     <string name="password">password</string>
+    <string name="phone">phone number</string>
+    <string name="todo">TODO</string>
 
 </resources>
