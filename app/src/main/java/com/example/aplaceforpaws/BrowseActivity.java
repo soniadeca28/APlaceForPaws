@@ -12,11 +12,12 @@ public class BrowseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_page);
         Button back = findViewById(R.id.browseBackButton);
-        back.setOnClickListener(v -> backtoIntermediate());
+        back.setOnClickListener(v -> backToIntermediate());
     }
 
-    private void backtoIntermediate() {
+    private void backToIntermediate() {
         Intent intent = new Intent(this, IntermediateActivity.class);
         startActivity(intent);
+        finish();
     }
 }

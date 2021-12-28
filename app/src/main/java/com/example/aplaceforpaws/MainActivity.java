@@ -23,10 +23,12 @@ public class MainActivity extends AppCompatActivity {
     private void openLoginPageActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void openRegisterPageActivity() {
         Intent intent2 = new Intent(this, RegisterActivity.class);
         startActivity(intent2);
+        finish();
     }
 }

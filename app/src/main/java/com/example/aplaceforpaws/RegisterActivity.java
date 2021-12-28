@@ -89,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("phone number", phn);
                     documentReference.set(user).addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user Profile is created for : " + userId)).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
                     startActivity(new Intent(getApplicationContext(), IntermediateActivity.class));
+                    finish();
                     //FirebaseAuth.getInstance().signOut();
                     finish();
                 } else {
@@ -103,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void backToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
 
     }
 }
