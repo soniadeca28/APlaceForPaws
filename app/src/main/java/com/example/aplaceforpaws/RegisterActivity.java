@@ -47,11 +47,11 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
 
-       /* if(auth.getCurrentUser() != null)
-        {
-            startActivity(new Intent(getApplicationContext(),MainActivity.class)); // sa te duca la pagina la care vei fi cand esti logat
-            finish();
-        }*/
+//       if(auth.getCurrentUser() != null)
+//        {
+//            startActivity(new Intent(getApplicationContext(),IntermediateActivity.class)); // sa te duca la pagina la care vei fi cand esti logat
+//            finish();
+//        }
 
         registerButton.setOnClickListener(v -> {
             final String eml = email.getText().toString().trim();
@@ -91,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("email",eml);
                     user.put("phone number",phn);
                     documentReference.set(user).addOnSuccessListener(unused -> Log.d(TAG,"onSuccess: user Profile is created for : " + userId)).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
-                    startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                    startActivity(new Intent(getApplicationContext(),IntermediateActivity.class));
                     //FirebaseAuth.getInstance().signOut();
                     finish();
                 }
