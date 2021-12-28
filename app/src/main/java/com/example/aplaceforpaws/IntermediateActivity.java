@@ -17,11 +17,19 @@ public class IntermediateActivity extends AppCompatActivity {
 
         Button logout = findViewById(R.id.logout);
         logout.setOnClickListener(v -> logout());
+
+        Button browse = findViewById(R.id.browse);
+        browse.setOnClickListener(v -> browse());
     }
 
     private void logout() {
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void browse() {
+        Intent intent = new Intent(this, BrowseActivity.class);
         startActivity(intent);
     }
 }

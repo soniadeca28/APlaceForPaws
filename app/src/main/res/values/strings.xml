@@ -19,5 +19,7 @@
     <string name="newAd">New Ad</string>
     <string name="myAds">My Ads</string>
     <string name="logout">Log out</string>
+    <string name="filters">Filter…</string>
+    <string name="browsePetsTitle">Pets</string>
 
 </resources>
