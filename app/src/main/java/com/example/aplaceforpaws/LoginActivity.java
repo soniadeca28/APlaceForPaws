@@ -61,12 +61,12 @@ public class LoginActivity extends AppCompatActivity {
 
             auth.signInWithEmailAndPassword(eml, psw).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login successful! \n", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), IntermediateActivity.class));
                     finish();
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(LoginActivity.this, "Login could not be completed" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login could not be completed! \n" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 

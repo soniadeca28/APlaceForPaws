@@ -59,17 +59,17 @@ public class RegisterActivity extends AppCompatActivity {
             final String phn = phone.getText().toString();
 
             if (TextUtils.isEmpty(eml)) {
-                email.setError("Username required");
+                email.setError("Username required\n");
                 return;
             }
 
             if (TextUtils.isEmpty(psw)) {
-                password.setError("Please provide a password");
+                password.setError("Please provide a password\n");
                 return;
             }
 
             if (password.length() < 6) {
-                password.setError("The password needs to be at least 6 characters");
+                password.setError("The password needs to be at least 6 characters\n");
                 return;
             }
 
@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             auth.createUserWithEmailAndPassword(eml, psw).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Account created successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Account created successfully! \n", Toast.LENGTH_SHORT).show();
                     // store the other data here
                     userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
                     DocumentReference documentReference = fStore.collection("users").document(userId);
@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
                     finish();
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(RegisterActivity.this, "Could not create the account" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Could not create the account! \n" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 

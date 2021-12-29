@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class IntermediateActivity extends AppCompatActivity {
 
+    FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,17 @@ public class IntermediateActivity extends AppCompatActivity {
 
         Button browse = findViewById(R.id.browse);
         browse.setOnClickListener(v -> browse());
+
+        Button newAd = findViewById(R.id.new_ad);
+        newAd.setOnClickListener(v -> newAd());
+
+        auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class)); // sa te duca la pagina principala fiindca nu esti logat
+            finish();
+        }
+
     }
 
     private void logout() {
@@ -31,6 +44,12 @@ public class IntermediateActivity extends AppCompatActivity {
 
     private void browse() {
         Intent intent = new Intent(this, BrowseActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void newAd() {
+        Intent intent = new Intent(this, NewAdActivity.class);
         startActivity(intent);
         finish();
     }
