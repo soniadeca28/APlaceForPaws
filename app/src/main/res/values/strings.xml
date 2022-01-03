@@ -25,5 +25,7 @@
     <string name="petAge">pet age</string>
     <string name="petDescription">pet description</string>
     <string name="addPicture">+ picture</string>
+    <string name="done">done</string>
+    <string name="addingPicture">adding picture</string>
 
 </resources>

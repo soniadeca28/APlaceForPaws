@@ -49,21 +49,40 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.322"
+        app:layout_constraintVertical_bias="0.254"
         tools:ignore="TextContrastCheck" />
 
-    <Spinner
-        android:id="@+id/petTypeChoiceBox"
+    <Button
+        android:id="@+id/addImage"
+        android:layout_width="137dp"
+        android:layout_height="43dp"
+        android:backgroundTint="@color/greyblue"
+        android:text="@string/addPicture"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.295"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.806"
+        tools:ignore="TextContrastCheck" />
+
+    <EditText
+        android:id="@+id/newAdPetDescription"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:hint="@string/petName"
-        android:gravity="center|fill"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/petDescription"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.442" />
+        app:layout_constraintVertical_bias="0.66" />
 
     <EditText
         android:id="@+id/newAdPetAge"
@@ -79,40 +98,49 @@
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.582"
+        app:layout_constraintVertical_bias="0.515"
         tools:ignore="TextContrastCheck" />
 
-    <EditText
-        android:id="@+id/newAdPetDescription"
+    <Spinner
+        android:id="@+id/petTypeChoiceBox"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="@string/petDescription"
-        android:inputType="textMultiLine"
+        android:gravity="center|fill"
+        android:hint="@string/petName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.727"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_bias="0.374" />
 
     <Button
-        android:id="@+id/addImage"
-        android:layout_width="160dp"
-        android:layout_height="53dp"
+        android:id="@+id/done"
+        android:layout_width="143dp"
+        android:layout_height="52dp"
         android:backgroundTint="@color/peach"
-        android:text="@string/addPicture"
+        android:text="@string/done"
         android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.322"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884"
+        app:layout_constraintVertical_bias="0.951"
         tools:ignore="TextContrastCheck" />
+
+    <ImageView
+        android:id="@+id/petImg"
+        android:layout_width="84dp"
+        android:layout_height="91dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.755"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.822"
+        android:contentDescription="@string/addingPicture" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
