@@ -1,11 +1,13 @@
 package com.example.aplaceforpaws;
 
-import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,17 +17,24 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 
 import java.util.ArrayList;
-import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class NewAdActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -44,6 +53,12 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
     private Uri imageUri;
 
     FirebaseAuth auth;
+
+    FirebaseFirestore fStore;
+
+    private StorageReference storageReference;
+    private DatabaseReference databaseReference;
+    private StorageTask storageTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +81,9 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         categories.add("Hedgehog");
 
         auth = FirebaseAuth.getInstance();
+
+        fStore = FirebaseFirestore.getInstance();
+
         if (auth.getCurrentUser() == null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class)); // sa te duca la pagina principala fiindca nu esti logat
             finish();
@@ -81,11 +99,13 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         Button backButton = findViewById(R.id.newAdBackButton);
         backButton.setOnClickListener(v -> backToIntermediate());
 
+        storageReference = FirebaseStorage.getInstance().getReference("uploads");
+        databaseReference = FirebaseDatabase.getInstance().getReference("uploads");
+
         addPicture = findViewById(R.id.addImage);
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == RESULT_OK && result.getData() != null)
-            {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 Intent data = result.getData();
                 imageUri = data.getData();
                 image.setImageURI(imageUri);
@@ -94,7 +114,13 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         addPicture.setOnClickListener(this::addPicture);
 
         done = findViewById(R.id.done);
-        done.setOnClickListener(v -> saveValue(choice));
+        done.setOnClickListener(v -> {
+            if (storageTask != null && storageTask.isInProgress()) {
+                Toast.makeText(NewAdActivity.this, "Upload in progress\n", Toast.LENGTH_SHORT).show();
+            } else {
+                saveEntry(choice);
+            }
+        });
 
     }
 
@@ -108,15 +134,12 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        if (parent.getItemAtPosition(position).equals("Type")) {
-            //nothing
-        } else {
+        if (!parent.getItemAtPosition(position).equals("Type")) {
 
             String text = parent.getItemAtPosition(position).toString();
             Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
             choice = petType.getSelectedItem().toString();
         }
-
     }
 
     @Override
@@ -124,19 +147,79 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
-
-    private void saveValue(String choice) {
-        if (choice.equals("Type")) {
-            Toast.makeText(this, "Please select a pet type", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            member.setPetType(choice);
-            //databaseReference.setValue(choice);
-            Toast.makeText(this, "Value saved !", Toast.LENGTH_SHORT).show();
-        }
+    private String getImageExtension(Uri img) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(img));
     }
 
+    private void saveEntry(String choice) {
+
+        final String nm = petName.getText().toString().trim();
+        final String ag = petAge.getText().toString().trim();
+        final String dc = petDescription.getText().toString().trim();
+
+        if (TextUtils.isEmpty(nm)) {
+            petName.setError("name required\n");
+            Toast.makeText(this, "Please select the pet's name\n", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(choice != null) {
+            member.setPetType(choice);
+        }
+        else
+        {
+            Toast.makeText(this, "Please select a pet type\n", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(ag)) {
+            petAge.setError("age required\n");
+            Toast.makeText(this, "Please select the pet's age\n", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(dc)) {
+            petDescription.setError("description required\n");
+            Toast.makeText(this, "Please provide a description\n", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (imageUri != null) {
+            StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getImageExtension(imageUri));
+            storageTask = fileReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                //update progressBar !!!!!!!!!!!!!!!! https://www.youtube.com/watch?v=lPfQN-Sfnjw 13:36
+                Toast.makeText(NewAdActivity.this, "Ad saved successfully\n", Toast.LENGTH_SHORT).show();
+                Upload upload = new Upload(petName.getText().toString().trim(),
+                        member.getPetType().trim(),
+                        petAge.getText().toString().trim(),
+                        petDescription.getText().toString().trim(),
+                        Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl().toString()
+                );
+                String uploadId = databaseReference.push().getKey();
+//                    databaseReference.child(uploadId).setValue(upload);
+
+                assert uploadId != null;
+                DocumentReference documentReference = fStore.collection("uploads").document(uploadId);
+
+                Map<String, String> upl = new HashMap<>();
+                upl.put("petName", upload.getPetName());
+                upl.put("petType", upload.getPetType());
+                upl.put("petAge", upload.getPetAge());
+                upl.put("petDescription", upload.getDescription());
+                upl.put("downloadUrl", upload.getPetImage());
+                documentReference.set(upl).addOnSuccessListener(unused -> Log.d("TAG", "onSuccess: entry is created for : " + uploadId + "\n")).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.toString()));
+                startActivity(new Intent(getApplicationContext(), NewAdActivity.class));
+                finish();
+            }).addOnFailureListener(e -> Toast.makeText(NewAdActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show()).addOnProgressListener(snapshot -> {
+                double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                //update progressbar !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! progressBar.setProgress((int)progress);
+            });
+        } else {
+            Toast.makeText(this, "Please select an image\n", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void backToIntermediate() {
         Intent intent = new Intent(this, IntermediateActivity.class);
