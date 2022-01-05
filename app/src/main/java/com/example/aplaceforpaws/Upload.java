@@ -5,13 +5,13 @@ public class Upload {
     private String petType;
     private String petAge;
     private String description;
-    private String petImage;
+    private String downloadUrl;
 
     public Upload() {
 
     }
 
-    public Upload(String petName, String petType, String petAge, String description, String petImage) {
+    public Upload(String petName, String petType, String petAge, String description, String downloadUrl) {
         if (petName.trim().equals("")) {
             petName = "No Name";
         }
@@ -19,7 +19,7 @@ public class Upload {
         this.petType = petType;
         this.petAge = petAge;
         this.description = description;
-        this.petImage = petImage;
+        this.downloadUrl = downloadUrl;
     }
 
     public String getPetName() {
@@ -55,10 +55,18 @@ public class Upload {
     }
 
     public String getPetImage() {
-        return petImage;
+        return downloadUrl;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
     }
 
     public void setPetImage(String petImage) {
-        this.petImage = petImage;
+        this.downloadUrl = petImage;
     }
 }
