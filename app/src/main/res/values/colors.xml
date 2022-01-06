@@ -8,6 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#ffffff</color>
     <color name="babyblue">#8cd3f5</color>
+    <color name="greyblue">#588db8</color>
     <color name="peach">#f9a895</color>
     <color name="darkpeach">#ff8f75</color>
 </resources>

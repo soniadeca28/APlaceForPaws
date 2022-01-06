@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.aplaceforpaws">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -10,6 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.APlaceForPaws">
+        <activity
+            android:name=".MyAdsActivity"
+            android:exported="false" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
@@ -27,8 +32,16 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name"
-            android:exported="true"/>
+            android:exported="true" />
+        <activity
+            android:name=".BrowseActivity"
+            android:exported="true" />
+        <activity
+            android:name=".NewAdActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Member"
+            android:exported="true" />
     </application>
 
 </manifest>
