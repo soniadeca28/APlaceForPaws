@@ -4,7 +4,7 @@ public class Upload {
     private String petName;
     private String petType;
     private String petAge;
-    private String description;
+    private String petDescription;
     private String downloadUrl;
     private String imgName;
 
@@ -19,9 +19,17 @@ public class Upload {
         this.petName = petName;
         this.petType = petType;
         this.petAge = petAge;
-        this.description = description;
+        this.petDescription = description;
         this.downloadUrl = downloadUrl;
         this.imgName = imgName;
+    }
+
+    public String getPetDescription() {
+        return petDescription;
+    }
+
+    public void setPetDescription(String petDescription) {
+        this.petDescription = petDescription;
     }
 
     public String getImgName() {
@@ -57,11 +65,11 @@ public class Upload {
     }
 
     public String getDescription() {
-        return description;
+        return petDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.petDescription = description;
     }
 
     public String getPetImage() {

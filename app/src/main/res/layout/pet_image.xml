@@ -17,16 +17,6 @@
             android:orientation="horizontal">
 
             <TextView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/petName"
-                android:textColor="@color/teal_200"
-                android:textSize="20sp" />
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/pet_name"
@@ -40,14 +30,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            >
             <ImageView
                 android:id="@+id/imageViewPet"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+
+                android:layout_marginStart="1dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/petDescription"
+                android:layout_width="219dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                />
 
         </LinearLayout>
 
