@@ -195,7 +195,8 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                         member.getPetType().trim(),
                         petAge.getText().toString().trim(),
                         petDescription.getText().toString().trim(),
-                        Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl().toString()
+                        Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl().toString(),
+                        fileReference.getName()
                 );
                 String uploadId = databaseReference.push().getKey();
 //                    databaseReference.child(uploadId).setValue(upload);
@@ -209,6 +210,7 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                 upl.put("petAge", upload.getPetAge());
                 upl.put("petDescription", upload.getDescription());
                 upl.put("downloadUrl", upload.getPetImage());
+                upl.put("imgName",upload.getImgName());
                 documentReference.set(upl).addOnSuccessListener(unused -> Log.d("TAG", "onSuccess: entry is created for : " + uploadId + "\n")).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.toString()));
                 startActivity(new Intent(getApplicationContext(), NewAdActivity.class));
                 finish();

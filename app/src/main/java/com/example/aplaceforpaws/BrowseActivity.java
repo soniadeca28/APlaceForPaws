@@ -48,12 +48,9 @@ public class BrowseActivity extends AppCompatActivity {
     FirebaseAuth auth;
     private RecyclerView mRecyclerView;
     private ImageAdapter mAdapter;
-    private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
     FirebaseFirestore db;
     ProgressDialog progressDialog;
-    private StorageReference storageReference;
-    private Context mContext;
     private ImageView imageViewPet;
 
     @Override
@@ -81,34 +78,10 @@ public class BrowseActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view_browse);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        storageReference= FirebaseStorage.getInstance().getReference().child("uploads/1641326637731.jpg");
-        try {
-            final File localFile = File.createTempFile("1641326637731","jpg");
-            storageReference.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Toast.makeText(BrowseActivity.this,"Picture Rerieved",Toast.LENGTH_SHORT).show();
-                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                            ((ImageView)findViewById(R.id.imageViewPet)).setImageBitmap(bitmap);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(BrowseActivity.this,"kuru",Toast.LENGTH_SHORT).show();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        //  mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
         db = FirebaseFirestore.getInstance();
         mUploads = new ArrayList<>();
-        mAdapter = new ImageAdapter(BrowseActivity.this,mUploads,storageReference);
+        mAdapter = new ImageAdapter(BrowseActivity.this,mUploads);
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -119,30 +92,25 @@ public class BrowseActivity extends AppCompatActivity {
     private void EventChangeListener() {
 
         db.collection("uploads")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                .addSnapshotListener((value, error) -> {
 
-                        if(error != null){
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            Log.e("Firestore error",error.getMessage());
-                            return;
-                        }
-                        for(DocumentChange dc : value.getDocumentChanges()){
-
-                            if(dc.getType() == DocumentChange.Type.ADDED){
-                                mUploads.add(dc.getDocument().toObject(Upload.class));
-                                /*Glide.with(BrowseActivity.this)
-                                        .load(storageReference)
-                                        .into(imageViewPet);*/
-                            }
-                            mAdapter.notifyDataSetChanged();
-                            if(progressDialog.isShowing())
-                                progressDialog.dismiss();
-                        }
-
+                    if(error != null){
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        Log.e("Firestore error",error.getMessage());
+                        return;
                     }
+                    assert value != null;
+                    for(DocumentChange dc : value.getDocumentChanges()){
+
+                        if(dc.getType() == DocumentChange.Type.ADDED){
+                            mUploads.add(dc.getDocument().toObject(Upload.class));
+                        }
+                        mAdapter.notifyDataSetChanged();
+                        if(progressDialog.isShowing())
+                            progressDialog.dismiss();
+                    }
+
                 });
     }
 
