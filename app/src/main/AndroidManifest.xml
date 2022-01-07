@@ -14,7 +14,7 @@
         android:theme="@style/Theme.APlaceForPaws">
         <activity
             android:name=".MyAdsActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
@@ -41,6 +41,9 @@
             android:exported="true" />
         <activity
             android:name=".Member"
+            android:exported="true" />
+        <activity
+            android:name=".SeeMyAdActivity"
             android:exported="true" />
     </application>
 

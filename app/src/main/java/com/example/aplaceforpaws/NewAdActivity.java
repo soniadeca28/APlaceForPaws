@@ -196,10 +196,10 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                         petAge.getText().toString().trim(),
                         petDescription.getText().toString().trim(),
                         Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl().toString(),
-                        fileReference.getName()
+                        fileReference.getName(),
+                        Objects.requireNonNull(auth.getCurrentUser()).getEmail()
                 );
                 String uploadId = databaseReference.push().getKey();
-//                    databaseReference.child(uploadId).setValue(upload);
 
                 assert uploadId != null;
                 DocumentReference documentReference = fStore.collection("uploads").document(uploadId);
@@ -211,6 +211,7 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                 upl.put("petDescription", upload.getDescription());
                 upl.put("downloadUrl", upload.getPetImage());
                 upl.put("imgName",upload.getImgName());
+                upl.put("currentUser",upload.getCurrentUser());
                 documentReference.set(upl).addOnSuccessListener(unused -> Log.d("TAG", "onSuccess: entry is created for : " + uploadId + "\n")).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.toString()));
                 startActivity(new Intent(getApplicationContext(), NewAdActivity.class));
                 finish();

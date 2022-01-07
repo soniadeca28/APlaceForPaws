@@ -26,6 +26,9 @@ public class IntermediateActivity extends AppCompatActivity {
         Button newAd = findViewById(R.id.new_ad);
         newAd.setOnClickListener(v -> newAd());
 
+        Button myAds = findViewById(R.id.my_ads);
+        myAds.setOnClickListener(v -> myAds());
+
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null) {
@@ -53,4 +56,11 @@ public class IntermediateActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void myAds() {
+        Intent intent = new Intent(this, MyAdsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }
