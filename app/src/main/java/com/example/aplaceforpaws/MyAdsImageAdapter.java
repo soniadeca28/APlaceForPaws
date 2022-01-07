@@ -1,11 +1,13 @@
 package com.example.aplaceforpaws;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,10 +73,20 @@ public class MyAdsImageAdapter extends RecyclerView.Adapter<MyAdsImageAdapter.My
     public static class MyAdsImageViewHolder extends RecyclerView.ViewHolder {
         TextView petName;
         ImageView downloadUrl;
+        Button myAdButton;
+        private final Context context;
         public MyAdsImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.pet_name_my_ads);
             downloadUrl = itemView.findViewById(R.id.myAdsImageViewPet);
+            myAdButton = itemView.findViewById(R.id.seeAd);
+            context = itemView.getContext();
+            myAdButton.setOnClickListener(v -> {
+                Intent intent = new Intent(context, SeeMyAdActivity.class);
+                context.startActivity(intent);
+            });
         }
     }
+
+
 }

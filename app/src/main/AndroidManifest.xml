@@ -42,6 +42,9 @@
         <activity
             android:name=".Member"
             android:exported="true" />
+        <activity
+            android:name=".SeeMyAdActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
