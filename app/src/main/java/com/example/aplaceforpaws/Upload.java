@@ -7,12 +7,13 @@ public class Upload {
     private String petDescription;
     private String downloadUrl;
     private String imgName;
+    private String currentUser;
 
     public Upload() {
 
     }
 
-    public Upload(String petName, String petType, String petAge, String description, String downloadUrl,String imgName) {
+    public Upload(String petName, String petType, String petAge, String description, String downloadUrl,String imgName,String currentUser) {
         if (petName.trim().equals("")) {
             petName = "No Name";
         }
@@ -22,6 +23,15 @@ public class Upload {
         this.petDescription = description;
         this.downloadUrl = downloadUrl;
         this.imgName = imgName;
+        this.currentUser = currentUser;
+    }
+
+    public String getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(String currentUser) {
+        this.currentUser = currentUser;
     }
 
     public String getPetDescription() {
