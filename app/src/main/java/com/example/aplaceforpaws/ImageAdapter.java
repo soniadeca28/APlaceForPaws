@@ -60,6 +60,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         Upload uploadCurrent = mUploads.get(position);
         holder.petName.setText(uploadCurrent.getPetName());
         holder.petDescription.setText(uploadCurrent.getPetDescription());
+        holder.petAge.setText(uploadCurrent.getPetAge());
 
         filename = uploadCurrent.getImgName();
         imgParts = filename.split("\\.");
@@ -89,7 +90,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
-        TextView petName, petDescription;
+        TextView petName, petDescription, petAge;
         ImageView downloadUrl;
 
 
@@ -98,6 +99,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             petName = itemView.findViewById(R.id.pet_name);
             downloadUrl = itemView.findViewById(R.id.imageViewPet);
             petDescription = itemView.findViewById(R.id.petDescription);
+            petAge = itemView.findViewById(R.id.petAge);
 
         }
     }

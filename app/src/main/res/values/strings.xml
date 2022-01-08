@@ -33,6 +33,7 @@
     <string name="filter">filter</string>
     <string name="filter_by">Filter by</string>
     <string name="sort_by">sort by</string>
+    <string name="age">Age:</string>
     <string-array name="sort_types">
         <item>sort by:</item>
         <item>Pet Name</item>

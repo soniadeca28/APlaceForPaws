@@ -161,23 +161,9 @@ public class BrowseActivity extends AppCompatActivity {
         Collections.sort(mUploads, Comparator.comparing(Upload::getPetName));
     }
 
-    private void sortByType(){
-
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void sortByAge(){
         Collections.sort(mUploads, Comparator.comparing(Upload::getPetAge));
-     /*   Collections.sort(mUploads, (p1,p2)->{
-            if(p1.getPetAge() > p2.getPetAge()){
-                return 1;
-            }else if(p1.getPetAge() < p2.getPetAge()){
-                return -1;
-            }
-            else{
-                return 0;
-            }
-                });*/
     }
 
 
