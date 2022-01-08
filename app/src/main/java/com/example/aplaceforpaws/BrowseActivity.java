@@ -1,46 +1,37 @@
 package com.example.aplaceforpaws;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.Spinner;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.IOException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class BrowseActivity extends AppCompatActivity {
@@ -52,14 +43,27 @@ public class BrowseActivity extends AppCompatActivity {
     FirebaseFirestore db;
     ProgressDialog progressDialog;
     private ImageView imageViewPet;
+    Spinner petType;
+    Member member;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_page);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar) ;
+        toolbar.setTitleTextColor(Color.parseColor("#f9a895"));
+        setSupportActionBar(toolbar);
+
+        petType = findViewById(R.id.spinner_browse);
+
+
 
         Button back = findViewById(R.id.browseBackButton);
         back.setOnClickListener(v -> backToIntermediate());
+
+
 
         auth = FirebaseAuth.getInstance();
 
@@ -82,10 +86,11 @@ public class BrowseActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         mUploads = new ArrayList<>();
         mAdapter = new ImageAdapter(BrowseActivity.this,mUploads);
-
         mRecyclerView.setAdapter(mAdapter);
 
         EventChangeListener();
+
+        setupSort();
 
     }
 
@@ -122,4 +127,58 @@ public class BrowseActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void setupSort(){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sort_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        petType.setAdapter(adapter);
+        petType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if(position == 1){
+                    sortByName();
+                }
+                    else if(position == 2){
+                        sortByAge();
+                }
+
+                    mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        member = new Member();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void sortByName(){
+        Collections.sort(mUploads, Comparator.comparing(Upload::getPetName));
+    }
+
+    private void sortByType(){
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void sortByAge(){
+        Collections.sort(mUploads, Comparator.comparing(Upload::getPetAge));
+     /*   Collections.sort(mUploads, (p1,p2)->{
+            if(p1.getPetAge() > p2.getPetAge()){
+                return 1;
+            }else if(p1.getPetAge() < p2.getPetAge()){
+                return -1;
+            }
+            else{
+                return 0;
+            }
+                });*/
+    }
+
+
 }

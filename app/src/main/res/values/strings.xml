@@ -29,5 +29,15 @@
     <string name="more">more</string>
     <string name="addingPicture">adding picture</string>
     <string name="seeAd">See ad</string>
+    <string name="search">search</string>
+    <string name="filter">filter</string>
+    <string name="filter_by">Filter by</string>
+    <string name="sort_by">sort by</string>
+    <string-array name="sort_types">
+        <item>sort by:</item>
+        <item>Pet Name</item>
+        <item>Pet Age</item>
+    </string-array>
+
 
 </resources>
