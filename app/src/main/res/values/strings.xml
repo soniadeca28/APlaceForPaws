@@ -39,6 +39,14 @@
         <item>Pet Name</item>
         <item>Pet Age</item>
     </string-array>
+    <string-array name="pet_types">
+        <item>pet type:</item>
+        <item>Cat</item>
+        <item>Dog</item>
+        <item>Fish</item>
+        <item>Parrot</item>
+        <item>Hedgehog</item>
+    </string-array>
 
 
 </resources>

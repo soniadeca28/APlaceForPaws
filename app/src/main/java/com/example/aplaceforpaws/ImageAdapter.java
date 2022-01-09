@@ -40,12 +40,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private String imgName;
     private String imgExtension;
     private String[] imgParts;
+    private List<Upload> mUploadsAux;
 
 
     public ImageAdapter(Context mContext, List<Upload> mUploads) {
         this.mContext = mContext;
         this.mUploads = mUploads;
-
+        this.mUploadsAux=mUploads;
     }
 
     @NonNull
