@@ -10,8 +10,10 @@
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3223958333333333" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3223958333333333" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/drawable/roundedbutton.xml" value="0.2786458333333333" />
+        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout-v26/spec_ad_pet_image.xml" value="0.209375" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/activity_my_ads.xml" value="0.2734375" />
+        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/activity_see_specific_ad.xml" value="0.25" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/browse_page.xml" value="0.33" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/intermediate_page.xml" value="0.3140625" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/item_discography_album.xml" value="0.2734375" />
@@ -21,6 +23,7 @@
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/pet_image_my_ads.xml" value="0.27079303675048355" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/register_page.xml" value="0.25" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/see_my_ad.xml" value="0.27760416666666665" />
+        <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/layout/spec_ad_pet_image.xml" value="0.33" />
         <entry key="..\:/Users/sonia/AndroidStudioProjects/APlaceForPaws/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3151041666666667" />
       </map>
     </option>
