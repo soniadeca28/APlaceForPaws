@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,9 +31,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder>{
 
     private Context mContext;
     private List<Upload> mUploads;
@@ -40,17 +43,19 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private String imgName;
     private String imgExtension;
     private String[] imgParts;
+    private List<Upload> mUploadsAux;
 
 
     public ImageAdapter(Context mContext, List<Upload> mUploads) {
         this.mContext = mContext;
         this.mUploads = mUploads;
+        this.mUploadsAux=mUploads;
     }
 
     @NonNull
     @Override
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image,parent,false);
         return new ImageViewHolder(v);
     }
 
@@ -59,22 +64,23 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         Upload uploadCurrent = mUploads.get(position);
         holder.petName.setText(uploadCurrent.getPetName());
         holder.petDescription.setText(uploadCurrent.getPetDescription());
+        holder.petAge.setText(uploadCurrent.getPetAge());
 
         filename = uploadCurrent.getImgName();
         imgParts = filename.split("\\.");
         imgName = imgParts[0];
         imgExtension = imgParts[1];
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("uploads/" + filename);
+        storageReference= FirebaseStorage.getInstance().getReference().child("uploads/" + filename);
         try {
-            final File localFile = File.createTempFile(imgName, imgExtension);
+            final File localFile = File.createTempFile(imgName,imgExtension);
             storageReference.getFile(localFile)
                     .addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(mContext, "o mer", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext,"o mer",Toast.LENGTH_SHORT).show();
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                         holder.downloadUrl.setImageBitmap(bitmap);
 
-                    }).addOnFailureListener(e -> Toast.makeText(mContext, "kuru", Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> Toast.makeText(mContext,"kuru",Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -97,8 +103,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return mUploads.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
-        TextView petName, petDescription;
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
+        TextView petName, petDescription, petAge;
         ImageView downloadUrl;
         Button seeMore;
 
@@ -107,6 +114,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             petName = itemView.findViewById(R.id.pet_name);
             downloadUrl = itemView.findViewById(R.id.imageViewPet);
             petDescription = itemView.findViewById(R.id.petDescription);
+            petAge = itemView.findViewById(R.id.petAge);
+
             seeMore = itemView.findViewById(R.id.more);
         }
     }
