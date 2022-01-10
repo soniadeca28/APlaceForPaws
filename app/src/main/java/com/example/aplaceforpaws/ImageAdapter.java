@@ -1,12 +1,15 @@
 package com.example.aplaceforpaws;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder>{
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
     private Context mContext;
     private List<Upload> mUploads;
@@ -47,7 +50,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @NonNull
     @Override
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image,parent,false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image, parent, false);
         return new ImageViewHolder(v);
     }
 
@@ -62,19 +65,30 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         imgName = imgParts[0];
         imgExtension = imgParts[1];
 
-        storageReference= FirebaseStorage.getInstance().getReference().child("uploads/" + filename);
+        storageReference = FirebaseStorage.getInstance().getReference().child("uploads/" + filename);
         try {
-            final File localFile = File.createTempFile(imgName,imgExtension);
+            final File localFile = File.createTempFile(imgName, imgExtension);
             storageReference.getFile(localFile)
                     .addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(mContext,"o mer",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "o mer", Toast.LENGTH_SHORT).show();
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                         holder.downloadUrl.setImageBitmap(bitmap);
 
-                    }).addOnFailureListener(e -> Toast.makeText(mContext,"kuru",Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> Toast.makeText(mContext, "kuru", Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Button seeMore = holder.seeMore;
+        seeMore.setOnClickListener(v -> {
+            Intent intent = new Intent(mContext, SeeSpecificAd.class);
+            Bundle info = new Bundle();
+            info.putString("dlUrl",uploadCurrent.getDownloadUrl());
+            info.putString("petName",uploadCurrent.getPetName());
+            info.putString("petDescription",uploadCurrent.getPetDescription());
+            intent.putExtras(info);
+            mContext.startActivity(intent);
+        });
 
     }
 
@@ -83,18 +97,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         return mUploads.size();
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder{
-        TextView petName,petDescription;
+    public static class ImageViewHolder extends RecyclerView.ViewHolder {
+        TextView petName, petDescription;
         ImageView downloadUrl;
-
+        Button seeMore;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.pet_name);
             downloadUrl = itemView.findViewById(R.id.imageViewPet);
             petDescription = itemView.findViewById(R.id.petDescription);
-
-
+            seeMore = itemView.findViewById(R.id.more);
         }
     }
 }

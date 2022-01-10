@@ -81,7 +81,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         mUploads = new ArrayList<>();
-        mAdapter = new ImageAdapter(BrowseActivity.this,mUploads);
+        mAdapter = new ImageAdapter(BrowseActivity.this, mUploads);
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -94,27 +94,25 @@ public class BrowseActivity extends AppCompatActivity {
         db.collection("uploads")
                 .addSnapshotListener((value, error) -> {
 
-                    if(error != null){
-                        if(progressDialog.isShowing())
+                    if (error != null) {
+                        if (progressDialog.isShowing())
                             progressDialog.dismiss();
-                        Log.e("Firestore error",error.getMessage());
+                        Log.e("Firestore error", error.getMessage());
                         return;
                     }
                     assert value != null;
-                    for(DocumentChange dc : value.getDocumentChanges()){
+                    for (DocumentChange dc : value.getDocumentChanges()) {
 
-                        if(dc.getType() == DocumentChange.Type.ADDED){
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
                             mUploads.add(dc.getDocument().toObject(Upload.class));
                         }
                         mAdapter.notifyDataSetChanged();
-                        if(progressDialog.isShowing())
+                        if (progressDialog.isShowing())
                             progressDialog.dismiss();
                     }
 
                 });
     }
-
-
 
 
     private void backToIntermediate() {
