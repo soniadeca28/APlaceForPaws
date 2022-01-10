@@ -67,7 +67,7 @@ public class BrowseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_page);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar) ;
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#f9a895"));
         setSupportActionBar(toolbar);
 

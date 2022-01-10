@@ -62,16 +62,17 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.Toolbar
+
         android:id="@+id/toolbar"
         android:layout_width="414dp"
         android:layout_height="57dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="129dp"
         android:layout_marginBottom="546dp"
+
         android:background="@color/peach"
 
         android:minHeight="?attr/actionBarSize"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
