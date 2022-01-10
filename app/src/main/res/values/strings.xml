@@ -48,5 +48,7 @@
         <item>Hedgehog</item>
     </string-array>
 
+    <string name="interested">Interested</string>
+    <string name="comma">,</string>
 
 </resources>

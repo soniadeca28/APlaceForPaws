@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SeeSpecificAd"
+    android:background="@color/white">
+
+    <Button
+        android:id="@+id/specAdBackButton"
+        android:layout_width="59dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginBottom="83dp"
+        android:backgroundTint="@color/babyblue"
+        android:text="@string/backButton"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_spec_ad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="parent"
+        tools:layout_editor_absoluteX="3dp">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_spec_ad"
+        android:layout_width="432dp"
+        android:layout_height="536dp"
+        android:clipToPadding="false"
+        android:paddingBottom="180dp"
+        android:visibility="visible"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
