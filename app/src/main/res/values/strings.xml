@@ -29,6 +29,7 @@
     <string name="more">more</string>
     <string name="addingPicture">adding picture</string>
     <string name="seeAd">See ad</string>
+    <string name="delete">Delete</string>
     <string name="search">search</string>
     <string name="filter">filter</string>
     <string name="filter_by">Filter by</string>
@@ -55,5 +56,6 @@
         <item>On</item>
         <item>Off</item>
     </string-array>
+    <string name="contact">Contact: </string>
 
 </resources>

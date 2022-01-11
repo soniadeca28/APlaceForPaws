@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -58,6 +59,13 @@ public class MyAdsActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         EventChangeListener();
+
+        if(mUploads.size() == 0 )
+        {
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
+        }
+
 
     }
 

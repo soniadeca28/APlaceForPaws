@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -152,6 +151,12 @@ public class BrowseActivity extends AppCompatActivity {
 
         EventChangeListener();
 
+        if(mUploads.size() == 0 )
+        {
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
+        }
+
         setupSort();
 
         setupFilterByType();
@@ -185,16 +190,16 @@ public class BrowseActivity extends AppCompatActivity {
                 });
     }
 
+
+
+
     private void backToIntermediate() {
         Intent intent = new Intent(this, IntermediateActivity.class);
         startActivity(intent);
         finish();
     }
 
-
-
     private void setupSort(){
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sort_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -229,7 +234,6 @@ public class BrowseActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void sortByName(){
-
         Collections.sort(mUploads, Comparator.comparing(Upload::getPetName));
         mRecyclerView.setAdapter(mAdapter);
     }
