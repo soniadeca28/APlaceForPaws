@@ -11,15 +11,14 @@
         android:id="@+id/specAdBackButton"
         android:layout_width="59dp"
         android:layout_height="48dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="83dp"
         android:backgroundTint="@color/babyblue"
         android:text="@string/backButton"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view_spec_ad"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"
         tools:ignore="TextContrastCheck" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,18 +32,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_spec_ad"
-        android:layout_width="432dp"
-        android:layout_height="536dp"
+        android:layout_width="408dp"
+        android:layout_height="618dp"
+        android:layout_marginTop="43dp"
         android:clipToPadding="false"
         android:paddingBottom="180dp"
         android:visibility="visible"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/specAdBackButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

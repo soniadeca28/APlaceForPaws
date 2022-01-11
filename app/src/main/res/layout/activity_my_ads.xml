@@ -36,25 +36,27 @@
         app:layout_constraintVertical_bias="0.008" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="192dp"
+        android:layout_width="409dp"
+        android:layout_height="602dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/myAdsTitle">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_my_ads"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_width="407dp"
+            android:layout_height="601dp"
+            android:clipToPadding="false"
+            android:paddingBottom="180dp"
             android:visibility="visible"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:paddingBottom="180dp"
-            android:clipToPadding="false"/>
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

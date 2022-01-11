@@ -1,7 +1,6 @@
 package com.example.aplaceforpaws;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -15,6 +14,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -73,18 +81,12 @@ public class MyAdsImageAdapter extends RecyclerView.Adapter<MyAdsImageAdapter.My
     public static class MyAdsImageViewHolder extends RecyclerView.ViewHolder {
         TextView petName;
         ImageView downloadUrl;
-        Button myAdButton;
         private final Context context;
         public MyAdsImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.pet_name_my_ads);
             downloadUrl = itemView.findViewById(R.id.myAdsImageViewPet);
-            myAdButton = itemView.findViewById(R.id.seeAd);
             context = itemView.getContext();
-            myAdButton.setOnClickListener(v -> {
-                Intent intent = new Intent(context, SeeMyAdActivity.class);
-                context.startActivity(intent);
-            });
         }
     }
 

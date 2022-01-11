@@ -25,7 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintVertical_bias="0.0">
 
             <ImageView
                 android:id="@+id/specAdPetImage"
@@ -107,22 +107,57 @@
                 app:layout_constraintVertical_bias="0.7"
                 tools:targetApi="o" />
 
-            <Button
-                android:id="@+id/interested"
-                android:layout_width="223dp"
-                android:layout_height="53dp"
-                android:layout_marginTop="36dp"
-                android:backgroundTint="@color/babyblue"
-                android:text="@string/interested"
-                android:textColor="@color/white"
-                android:textSize="24sp"
+            <TextView
+                android:id="@+id/petLocation"
+                android:layout_width="380dp"
+                android:layout_height="19dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="136dp"
+                android:autoSizeMaxTextSize="20dp"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeTextType="uniform"
+                android:ems="10"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.502"
+                app:layout_constraintHorizontal_bias="0.592"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/specAdPetDescription"
-                app:layout_constraintVertical_bias="0.0"
-                tools:ignore="TextContrastCheck" />
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textContact"
+                android:layout_width="52dp"
+                android:layout_height="18dp"
+                android:autoSizeMaxTextSize="20dp"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeTextType="uniform"
+                android:ems="10"
+                android:text="@string/contact"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.045"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/petLocation"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/emailAddressContact"
+                android:layout_width="323dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginEnd="200dp"
+                android:autoSizeMaxTextSize="20dp"
+                android:autoSizeMinTextSize="12dp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.031"
+                app:layout_constraintStart_toEndOf="@+id/textContact"
+                app:layout_constraintTop_toBottomOf="@+id/petLocation"
+                app:layout_constraintVertical_bias="0.0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

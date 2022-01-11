@@ -29,34 +29,15 @@
                 android:layout_width="115dp"
                 android:layout_height="117dp"
 
-                android:layout_marginStart="11dp"
-
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/imageDescription"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/seeAd"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.058"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                android:contentDescription="@string/imageDescription" />
-
-            <Button
-                android:id="@+id/seeAd"
-                android:layout_width="171dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="315dp"
-                android:layout_marginEnd="6dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/peach"
-                android:text="@string/seeAd"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/pet_name_my_ads"
