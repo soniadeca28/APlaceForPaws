@@ -203,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(RegisterActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(RegisterActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
         return address;
     }
 

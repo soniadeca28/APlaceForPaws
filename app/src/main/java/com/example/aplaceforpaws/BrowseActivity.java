@@ -419,7 +419,7 @@ public class BrowseActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(BrowseActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(BrowseActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
         return address;
     }
     private void setupLocationFilter(){

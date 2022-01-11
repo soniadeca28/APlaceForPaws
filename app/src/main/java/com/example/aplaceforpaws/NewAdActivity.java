@@ -322,7 +322,7 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Toast.makeText(NewAdActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(NewAdActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
         return address;
     }
 
