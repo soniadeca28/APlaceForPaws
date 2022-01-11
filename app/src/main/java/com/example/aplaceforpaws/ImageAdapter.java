@@ -13,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,14 +44,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private String imgName;
     private String imgExtension;
     private String[] imgParts;
-    private List<Upload> mUploadsAux;
+
+
 
 
     public ImageAdapter(Context mContext, List<Upload> mUploads) {
         this.mContext = mContext;
         this.mUploads = mUploads;
-        this.mUploadsAux=mUploads;
+
     }
+
+
 
     @NonNull
     @Override
@@ -76,11 +80,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             final File localFile = File.createTempFile(imgName,imgExtension);
             storageReference.getFile(localFile)
                     .addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(mContext,"o mer",Toast.LENGTH_SHORT).show();
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                         holder.downloadUrl.setImageBitmap(bitmap);
 
-                    }).addOnFailureListener(e -> Toast.makeText(mContext,"kuru",Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> Toast.makeText(mContext,"error loading data",Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,6 +112,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         ImageView downloadUrl;
         Button seeMore;
 
+
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.pet_name);
@@ -117,6 +121,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             petAge = itemView.findViewById(R.id.petAge);
 
             seeMore = itemView.findViewById(R.id.more);
+
         }
     }
 }

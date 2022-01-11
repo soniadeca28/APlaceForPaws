@@ -1,11 +1,18 @@
 package com.example.aplaceforpaws;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,13 +22,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class BrowseActivity extends AppCompatActivity {
 
@@ -59,21 +74,53 @@ public class BrowseActivity extends AppCompatActivity {
     private ImageView imageViewPet;
     Spinner petType;
     Spinner petFilter;
+    Spinner petLocation;
     Member member;
-   // private List<Upload> mUploadsAux;
+    LocationRequest locationRequest;
+    LocationCallback locationCallBack;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    String address;
+    public static final int FAST_UPDATE = 5;
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
 
-
-
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browse_page);
+
+
+        locationRequest = LocationRequest.create()
+                .setInterval(100)
+                .setFastestInterval(1000 * FAST_UPDATE)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(100);
+
+        locationCallBack = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                try {
+                    address = makeLocation(locationResult.getLastLocation());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        updateGPS();
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.getMainLooper()); // era null inainte
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.parseColor("#f9a895"));
         setSupportActionBar(toolbar);
 
         petType = findViewById(R.id.spinner_browse);
         petFilter = findViewById(R.id.spinner_filter_by_type);
+        petLocation = findViewById(R.id.location);
 
         Button back = findViewById(R.id.browseBackButton);
         back.setOnClickListener(v -> backToIntermediate());
@@ -113,6 +160,8 @@ public class BrowseActivity extends AppCompatActivity {
         setupSort();
 
         setupFilterByType();
+
+        setupLocationFilter();
 
     }
 
@@ -159,16 +208,18 @@ public class BrowseActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position == 1){
-                    sortByName();
-                }
-                    else if(position == 2){
+                switch(position) {
+                    case 1: {
+                        sortByName();
+                        break;
+                    }
+                    case 2: {
                         sortByAge();
-                        petFilter.setSelection(0);
-                        petFilter.setSelected(true);
-                }
-                    else mRecyclerView.setAdapter(mAdapter);
+                        break;
+                    }
 
+                    default: mRecyclerView.setAdapter(mAdapter);
+                }
                     mAdapter.notifyDataSetChanged();
             }
 
@@ -203,22 +254,35 @@ public class BrowseActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position == 1) showCats();
+                switch(position) {
 
-                else if(position == 2) showDogs();
+                    case 1 : {
+                        showCats();
+                        break;
+                    }
+                    case 2 : {
+                        showDogs();
+                        break;
+                    }
 
-                else if(position == 3) showFish();
+                    case 3 : {
+                        showFish();
+                        break;
+                    }
 
-                else if(position == 4) showParrots();
+                    case 4 : {
+                        showParrots();
+                        break;
+                    }
 
-                else if(position == 5) showHedgehogs();
-
-                else mRecyclerView.setAdapter(mAdapter);
-
+                    case 5 : {
+                        showHedgehogs();
+                        break;
+                    }
+                    default : mRecyclerView.setAdapter(mAdapter);
+                }
 
             }
-
-
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -309,5 +373,92 @@ public class BrowseActivity extends AppCompatActivity {
         mAdapterAux.notifyDataSetChanged();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSIONS_FINE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                updateGPS();
+            } else {
+                Toast.makeText(this, "The app requires permission to be granted in order to work", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private void updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(BrowseActivity.this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //user provided permission
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                try {
+                    address = makeLocation(location);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            //permission not granted
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            }
+        }
+    }
+
+
+    private String makeLocation(Location location) throws IOException {
+        Geocoder geocoder = new Geocoder(BrowseActivity.this, Locale.getDefault());
+        String address = "";
+        List<Address> addressList;
+        try {
+            addressList = geocoder.getFromLocation(
+                    location.getLatitude(), location.getLongitude(), 1
+            );
+            address = addressList.get(0).getSubAdminArea();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Toast.makeText(BrowseActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        return address;
+    }
+    private void setupLocationFilter(){
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.filter_location, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        petLocation.setAdapter(adapter);
+        petLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if(position == 1) filterByLocation();
+                else mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    private void filterByLocation(){
+
+        ImageAdapter mAdapterAux;
+        List<Upload> mUploadsAux;
+        String location;
+        mUploadsAux = new ArrayList<>();
+        mAdapterAux = new ImageAdapter(BrowseActivity.this,mUploadsAux);
+        for(Upload u : mUploads )  {
+            location=u.getAddress();
+            if (address.compareTo(location)==0) {
+                mUploadsAux.add(u);
+            }
+        }
+        mRecyclerView.setAdapter(mAdapterAux);
+        mAdapterAux.notifyDataSetChanged();
+
+    }
 
 }
