@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,6 +75,7 @@ public class BrowseActivity extends AppCompatActivity {
     private ImageView imageViewPet;
     Spinner petType;
     Spinner petFilter;
+    Spinner petLocation;
     Member member;
     LocationRequest locationRequest;
     LocationCallback locationCallBack;
@@ -81,6 +83,7 @@ public class BrowseActivity extends AppCompatActivity {
     String address;
     public static final int FAST_UPDATE = 5;
     private static final int PERMISSIONS_FINE_LOCATION = 99;
+    private int pos1, pos2, pos3;
 
 
     @SuppressLint("MissingPermission")
@@ -120,6 +123,7 @@ public class BrowseActivity extends AppCompatActivity {
 
         petType = findViewById(R.id.spinner_browse);
         petFilter = findViewById(R.id.spinner_filter_by_type);
+        petLocation = findViewById(R.id.location);
 
         Button back = findViewById(R.id.browseBackButton);
         back.setOnClickListener(v -> backToIntermediate());
@@ -153,6 +157,8 @@ public class BrowseActivity extends AppCompatActivity {
         setupSort();
 
         setupFilterByType();
+
+        setupLocationFilter();
 
     }
 
@@ -190,7 +196,9 @@ public class BrowseActivity extends AppCompatActivity {
         finish();
     }
 
-    private void setupSort(){
+    private void setupSort(){ //pos1 e pentru asta
+       pos2=0;
+       pos3=0;
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sort_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -199,14 +207,18 @@ public class BrowseActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position == 1){
-                    sortByName();
-                }
-                    else if(position == 2){
+                switch(position) {
+                    case 1: {
+                        sortByName();
+                        break;
+                    }
+                    case 2: {
                         sortByAge();
-                }
-                    else mRecyclerView.setAdapter(mAdapter);
+                        break;
+                    }
 
+                    default: mRecyclerView.setAdapter(mAdapter);
+                }
                     mAdapter.notifyDataSetChanged();
             }
 
@@ -221,6 +233,7 @@ public class BrowseActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void sortByName(){
+
         Collections.sort(mUploads, Comparator.comparing(Upload::getPetName));
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -241,22 +254,35 @@ public class BrowseActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                if(position == 1) showCats();
+                switch(position) {
 
-                else if(position == 2) showDogs();
+                    case 1 : {
+                        showCats();
+                        break;
+                    }
+                    case 2 : {
+                        showDogs();
+                        break;
+                    }
 
-                else if(position == 3) showFish();
+                    case 3 : {
+                        showFish();
+                        break;
+                    }
 
-                else if(position == 4) showParrots();
+                    case 4 : {
+                        showParrots();
+                        break;
+                    }
 
-                else if(position == 5) showHedgehogs();
-
-                else mRecyclerView.setAdapter(mAdapter);
-
+                    case 5 : {
+                        showHedgehogs();
+                        break;
+                    }
+                    default : mRecyclerView.setAdapter(mAdapter);
+                }
 
             }
-
-
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -396,6 +422,43 @@ public class BrowseActivity extends AppCompatActivity {
         Toast.makeText(BrowseActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
         return address;
     }
+    private void setupLocationFilter(){
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.filter_location, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        petLocation.setAdapter(adapter);
+        petLocation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                if(position == 1) filterByLocation();
+                else mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    private void filterByLocation(){
+
+        ImageAdapter mAdapterAux;
+        List<Upload> mUploadsAux;
+        String location;
+        mUploadsAux = new ArrayList<>();
+        mAdapterAux = new ImageAdapter(BrowseActivity.this,mUploadsAux);
+        for(Upload u : mUploads )  {
+            location=u.getAddress();
+            if (address.compareTo(location)==0) {
+                mUploadsAux.add(u);
+            }
+        }
+        mRecyclerView.setAdapter(mAdapterAux);
+        mAdapterAux.notifyDataSetChanged();
+
+    }
 
 }

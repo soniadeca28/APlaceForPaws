@@ -13,6 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,20 +44,25 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     private String imgName;
     private String imgExtension;
     private String[] imgParts;
-    private List<Upload> mUploadsAux;
+
+
 
 
     public ImageAdapter(Context mContext, List<Upload> mUploads) {
         this.mContext = mContext;
         this.mUploads = mUploads;
-        this.mUploadsAux=mUploads;
+
+
     }
+
+
 
     @NonNull
     @Override
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image,parent,false);
         return new ImageViewHolder(v);
+        //new ImageAdapter(mUploads,this);
     }
 
     @Override
@@ -109,6 +115,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         ImageView downloadUrl;
         Button seeMore;
 
+
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.pet_name);
@@ -117,6 +124,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             petAge = itemView.findViewById(R.id.petAge);
 
             seeMore = itemView.findViewById(R.id.more);
+
         }
     }
 }
