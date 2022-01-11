@@ -1,27 +1,51 @@
 package com.example.aplaceforpaws;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    public static final int FAST_UPDATE = 5;
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
+    String address;
     EditText email, password, name, phone;
     Button registerButton;
     FirebaseAuth auth;
@@ -29,11 +53,40 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userId;
     public static final String TAG = "TAG";
+    LocationRequest locationRequest;
+    LocationCallback locationCallBack;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    //google's api for location services
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_page);
+
+
+        locationRequest = LocationRequest.create()
+                .setInterval(100)
+                .setFastestInterval(1000 * FAST_UPDATE)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(100);
+
+        locationCallBack = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                try {
+                    address = makeLocation(locationResult.getLastLocation());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        updateGPS();
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.getMainLooper()); // era null inainte
 
         email = findViewById(R.id.registerEmail);
         password = findViewById(R.id.registerPassword);
@@ -73,7 +126,9 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
+
             progressBar.setVisibility(View.VISIBLE);
+
 
             //create user and store their info:
 
@@ -87,10 +142,10 @@ public class RegisterActivity extends AppCompatActivity {
                     user.put("name", nm);
                     user.put("email", eml);
                     user.put("phone number", phn);
+                    user.put("address",address);
                     documentReference.set(user).addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user Profile is created for : " + userId)).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
                     startActivity(new Intent(getApplicationContext(), IntermediateActivity.class));
                     finish();
-                    //FirebaseAuth.getInstance().signOut();
                     finish();
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -99,6 +154,57 @@ public class RegisterActivity extends AppCompatActivity {
             });
 
         });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSIONS_FINE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                updateGPS();
+            } else {
+                Toast.makeText(this, "The app requires permission to be granted in order to work", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private void updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(RegisterActivity.this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //user provided permission
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                try {
+                    address = makeLocation(location);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            //permission not granted
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            }
+        }
+    }
+
+
+    private String makeLocation(Location location) throws IOException {
+        Geocoder geocoder = new Geocoder(RegisterActivity.this, Locale.getDefault());
+        String address = "";
+        List<Address> addressList;
+        try {
+            addressList = geocoder.getFromLocation(
+                    location.getLatitude(), location.getLongitude(), 1
+            );
+            address = addressList.get(0).getSubAdminArea();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(RegisterActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        return address;
     }
 
     private void backToMainActivity() {

@@ -50,5 +50,6 @@
 
     <string name="interested">Interested</string>
     <string name="comma">,</string>
+    <string name="location">location</string>
 
 </resources>
