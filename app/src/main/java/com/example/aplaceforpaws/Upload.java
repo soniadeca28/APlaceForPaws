@@ -8,12 +8,13 @@ public class Upload {
     private String downloadUrl;
     private String imgName;
     private String currentUser;
+    private String address;
 
     public Upload() {
 
     }
 
-    public Upload(String petName, String petType, String petAge, String description, String downloadUrl,String imgName,String currentUser) {
+    public Upload(String petName, String petType, String petAge, String description, String downloadUrl,String imgName,String currentUser,String address) {
         if (petName.trim().equals("")) {
             petName = "No Name";
         }
@@ -24,6 +25,15 @@ public class Upload {
         this.downloadUrl = downloadUrl;
         this.imgName = imgName;
         this.currentUser = currentUser;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getCurrentUser() {

@@ -1,9 +1,17 @@
 package com.example.aplaceforpaws;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,8 +27,15 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,9 +45,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,6 +62,9 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
     Button done;
     Button addPicture;
     private ImageView image;
+    String address;
+    public static final int FAST_UPDATE = 5;
+    private static final int PERMISSIONS_FINE_LOCATION = 99;
 
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -59,11 +79,40 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private StorageTask storageTask;
+    LocationRequest locationRequest;
+    LocationCallback locationCallBack;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    //google's api for location services
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_ad_page);
+
+        locationRequest = LocationRequest.create()
+                .setInterval(100)
+                .setFastestInterval(1000 * FAST_UPDATE)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(100);
+
+        locationCallBack = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                try {
+                    address = makeLocation(locationResult.getLastLocation());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        updateGPS();
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.getMainLooper()); // era null inainte
+
 
         petName = findViewById(R.id.newAdPetName);
         petAge = findViewById(R.id.newAdPetAge);
@@ -197,7 +246,8 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                         petDescription.getText().toString().trim(),
                         Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getMetadata()).getReference()).getDownloadUrl().toString(),
                         fileReference.getName(),
-                        Objects.requireNonNull(auth.getCurrentUser()).getEmail()
+                        Objects.requireNonNull(auth.getCurrentUser()).getEmail(),
+                        address
                 );
                 String uploadId = databaseReference.push().getKey();
 
@@ -212,6 +262,7 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
                 upl.put("downloadUrl", upload.getPetImage());
                 upl.put("imgName",upload.getImgName());
                 upl.put("currentUser",upload.getCurrentUser());
+                upl.put("address",upload.getAddress());
                 documentReference.set(upl).addOnSuccessListener(unused -> Log.d("TAG", "onSuccess: entry is created for : " + uploadId + "\n")).addOnFailureListener(e -> Log.d("TAG", "onFailure: " + e.toString()));
                 startActivity(new Intent(getApplicationContext(), NewAdActivity.class));
                 finish();
@@ -222,6 +273,56 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         } else {
             Toast.makeText(this, "Please select an image\n", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSIONS_FINE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                updateGPS();
+            } else {
+                Toast.makeText(this, "The app requires permission to be granted in order to work", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private void updateGPS() {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(NewAdActivity.this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            //user provided permission
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                try {
+                    address = makeLocation(location);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            //permission not granted
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_FINE_LOCATION);
+            }
+        }
+    }
+
+
+    private String makeLocation(Location location) throws IOException {
+        Geocoder geocoder = new Geocoder(NewAdActivity.this, Locale.getDefault());
+        String address = "";
+        List<Address> addressList;
+        try {
+            addressList = geocoder.getFromLocation(
+                    location.getLatitude(), location.getLongitude(), 1
+            );
+            address = addressList.get(0).getSubAdminArea();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(NewAdActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
+        return address;
     }
 
     private void backToIntermediate() {
