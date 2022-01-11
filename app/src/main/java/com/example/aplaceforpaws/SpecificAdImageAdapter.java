@@ -46,6 +46,8 @@ public class SpecificAdImageAdapter extends RecyclerView.Adapter<SpecificAdImage
         holder.petName.setText(uploadCurrent.getPetName());
         holder.petDescription.setText(uploadCurrent.getPetDescription());
         holder.petAge.setText(uploadCurrent.getPetAge());
+        holder.location.setText(uploadCurrent.getAddress());
+        holder.email.setText(uploadCurrent.getCurrentUser());
 
         String filename = uploadCurrent.getImgName();
         String[] imgParts = filename.split("\\.");
@@ -73,9 +75,8 @@ public class SpecificAdImageAdapter extends RecyclerView.Adapter<SpecificAdImage
 
     public static class SpecificAdImageViewHolder extends RecyclerView.ViewHolder
     {
-        TextView petName,petDescription,petAge;
+        TextView petName,petDescription,petAge,location,email;
         ImageView downloadUrl;
-        Button interested;
         public SpecificAdImageViewHolder(@NonNull View itemView) {
             super(itemView);
             petName = itemView.findViewById(R.id.specAdPetName);
@@ -83,7 +84,8 @@ public class SpecificAdImageAdapter extends RecyclerView.Adapter<SpecificAdImage
             petDescription.setMovementMethod(new ScrollingMovementMethod());
             petAge = itemView.findViewById(R.id.specAdPetAge);
             downloadUrl = itemView.findViewById(R.id.specAdPetImage);
-            interested = itemView.findViewById(R.id.interested);
+            location = itemView.findViewById(R.id.petLocation);
+            email = itemView.findViewById(R.id.emailAddressContact);
         }
     }
 

@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
@@ -103,6 +104,12 @@ public class BrowseActivity extends AppCompatActivity {
 
         EventChangeListener();
 
+        if(mUploads.size() == 0 )
+        {
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
+        }
+
         setupSort();
 
         setupFilterByType();
@@ -157,6 +164,8 @@ public class BrowseActivity extends AppCompatActivity {
                 }
                     else if(position == 2){
                         sortByAge();
+                        petFilter.setSelection(0);
+                        petFilter.setSelected(true);
                 }
                     else mRecyclerView.setAdapter(mAdapter);
 
