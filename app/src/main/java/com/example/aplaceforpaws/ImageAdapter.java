@@ -52,7 +52,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         this.mContext = mContext;
         this.mUploads = mUploads;
 
-
     }
 
 
@@ -62,7 +61,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public ImageAdapter.ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.pet_image,parent,false);
         return new ImageViewHolder(v);
-        //new ImageAdapter(mUploads,this);
     }
 
     @Override
@@ -82,11 +80,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             final File localFile = File.createTempFile(imgName,imgExtension);
             storageReference.getFile(localFile)
                     .addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(mContext,"o mer",Toast.LENGTH_SHORT).show();
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                         holder.downloadUrl.setImageBitmap(bitmap);
 
-                    }).addOnFailureListener(e -> Toast.makeText(mContext,"kuru",Toast.LENGTH_SHORT).show());
+                    }).addOnFailureListener(e -> Toast.makeText(mContext,"error loading data",Toast.LENGTH_SHORT).show());
         } catch (IOException e) {
             e.printStackTrace();
         }

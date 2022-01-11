@@ -83,8 +83,6 @@ public class BrowseActivity extends AppCompatActivity {
     String address;
     public static final int FAST_UPDATE = 5;
     private static final int PERMISSIONS_FINE_LOCATION = 99;
-    private int pos1, pos2, pos3;
-
 
     @SuppressLint("MissingPermission")
     @Override
@@ -187,18 +185,16 @@ public class BrowseActivity extends AppCompatActivity {
                 });
     }
 
-
-
-
     private void backToIntermediate() {
         Intent intent = new Intent(this, IntermediateActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void setupSort(){ //pos1 e pentru asta
-       pos2=0;
-       pos3=0;
+
+
+    private void setupSort(){
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.sort_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
