@@ -1,6 +1,7 @@
 package com.example.aplaceforpaws;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -42,12 +43,10 @@ import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    public static final int DEFAULT_UPDATE = 30;
     public static final int FAST_UPDATE = 5;
     private static final int PERMISSIONS_FINE_LOCATION = 99;
     String address;
     EditText email, password, name, phone;
-    Switch locationSw;
     Button registerButton;
     FirebaseAuth auth;
     ProgressBar progressBar;
@@ -59,10 +58,35 @@ public class RegisterActivity extends AppCompatActivity {
     FusedLocationProviderClient fusedLocationProviderClient;
     //google's api for location services
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_page);
+
+
+        locationRequest = LocationRequest.create()
+                .setInterval(100)
+                .setFastestInterval(1000 * FAST_UPDATE)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setMaxWaitTime(100);
+
+        locationCallBack = new LocationCallback() {
+
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                try {
+                    address = makeLocation(locationResult.getLastLocation());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        updateGPS();
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.getMainLooper()); // era null inainte
 
         email = findViewById(R.id.registerEmail);
         password = findViewById(R.id.registerPassword);
@@ -72,7 +96,6 @@ public class RegisterActivity extends AppCompatActivity {
         back.setOnClickListener(v -> backToMainActivity());
         progressBar = findViewById(R.id.registerProgressBar);
         registerButton = findViewById(R.id.registerButton);
-        locationSw = findViewById(R.id.locationSwitch);
 
         auth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -103,20 +126,9 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            locationSw.setOnClickListener(v1 -> {
-                if(locationSw.isChecked())
-                {
-                    startLocationUpdates();
-                }
-                else
-                {
-                    stopLocationUpdates();
-                }
-            });
 
             progressBar.setVisibility(View.VISIBLE);
 
-            System.out.println(address);
 
             //create user and store their info:
 
@@ -124,20 +136,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Account created successfully! \n", Toast.LENGTH_SHORT).show();
                     // store the other data here
-                    locationCallBack = new LocationCallback() {
-
-                        @Override
-                        public void onLocationResult(@NonNull LocationResult locationResult) {
-                            super.onLocationResult(locationResult);
-                            Location location = locationResult.getLastLocation();
-                            try {
-                                address = makeLocation(location);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    };
                     userId = Objects.requireNonNull(auth.getCurrentUser()).getUid();
                     DocumentReference documentReference = fStore.collection("users").document(userId);
                     Map<String, String> user = new HashMap<>();
@@ -148,7 +146,6 @@ public class RegisterActivity extends AppCompatActivity {
                     documentReference.set(user).addOnSuccessListener(unused -> Log.d(TAG, "onSuccess: user Profile is created for : " + userId)).addOnFailureListener(e -> Log.d(TAG, "onFailure: " + e.toString()));
                     startActivity(new Intent(getApplicationContext(), IntermediateActivity.class));
                     finish();
-                    //FirebaseAuth.getInstance().signOut();
                     finish();
                 } else {
                     progressBar.setVisibility(View.INVISIBLE);
@@ -158,12 +155,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         });
 
-        locationRequest = LocationRequest.create()
-
-                .setInterval(1000 * DEFAULT_UPDATE)
-                .setFastestInterval(1000 * FAST_UPDATE)
-                .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        updateGPS();
     }
 
     @Override
@@ -185,7 +176,6 @@ public class RegisterActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             //user provided permission
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
-                updateUIValues(location);
                 try {
                     address = makeLocation(location);
                 } catch (IOException e) {
@@ -200,34 +190,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUIValues(Location location) {
-        //aici seteaza el ceva textView-uri
-//        String.valueOf(location.getLatitude());
-//        String.valueOf(location.getLongitude());
-//        String.valueOf(location.getAccuracy());
-//        if(location.hasAltitude())
-//        {
-//            String.valueOf(location.getAltitude());
-//        }
-//        if(location.hasSpeed())
-//        {
-//            String.valueOf(location.getSpeed());
-//        }
-
-
-    }
-
-    private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.getMainLooper());
-        updateGPS();
-    }
-
-    private void stopLocationUpdates(){
-        fusedLocationProviderClient.removeLocationUpdates(locationCallBack);
-    }
 
     private String makeLocation(Location location) throws IOException {
         Geocoder geocoder = new Geocoder(RegisterActivity.this, Locale.getDefault());
@@ -241,6 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Toast.makeText(RegisterActivity.this, "Adress is :" + address, Toast.LENGTH_SHORT).show();
         return address;
     }
 
