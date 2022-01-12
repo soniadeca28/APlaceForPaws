@@ -239,7 +239,6 @@ public class NewAdActivity extends AppCompatActivity implements AdapterView.OnIt
         if (imageUri != null) {
             StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getImageExtension(imageUri));
             storageTask = fileReference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-                //update progressBar !!!!!!!!!!!!!!!! https://www.youtube.com/watch?v=lPfQN-Sfnjw 13:36
                 Toast.makeText(NewAdActivity.this, "Ad saved successfully\n", Toast.LENGTH_SHORT).show();
                 Upload upload = new Upload(petName.getText().toString().trim(),
                         member.getPetType().trim(),
