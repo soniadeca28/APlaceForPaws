@@ -53,8 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userId;
     public static final String TAG = "TAG";
-    LocationRequest locationRequest;
-    LocationCallback locationCallBack;
+    LocationRequest locationRequest; //contains quality params for requests to FusedLocationProviderClient
+    LocationCallback locationCallBack; //for receiving notifications from FusedLocationProviderClient
     FusedLocationProviderClient fusedLocationProviderClient;
     //google's api for location services
 
